@@ -3,8 +3,11 @@ package controllers
 import (
 	"jwt/models"
 
+	"jwt/database"
+
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
+	"github.com/dgrijalva/jwt-go"
 )
 
 func Register(c *fiber.Ctx) error {
@@ -22,6 +25,40 @@ func Register(c *fiber.Ctx) error {
 		Email:    data["email"],
 		Password: password,
 	}
+
+	database.DB.Create(&user)
+
+	return c.JSON(user)
+}
+
+func Login(c *fiber.Ctx) error {
+	var data map[string]string
+	err := c.BodyParser(&data)
+
+	if err != nil {
+		return err
+	}
+
+	var user models.User
+	database.DB.Where("email = ?", data["email"]).First(&user)
+
+	if user.Id == 0 {
+		c.Status(fiber.StatusNotFound)
+		return c.JSON(fiber.Map{
+			"message": "User not found",
+		})
+	}
+
+	err = bcrypt.CompareHashAndPassword(user.Password, []byte(data["password"]))
+
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "Invalid credentials",
+		})
+	}
+
+	
 
 	return c.JSON(user)
 }
