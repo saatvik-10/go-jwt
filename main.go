@@ -1,19 +1,14 @@
 package main
 
 import (
+	"jwt/database"
 	"log"
 
 	"github.com/gofiber/fiber/v3"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
 
 func main() {
-	_, err := gorm.Open(mysql.Open("root:Messi@1987@/go_jwt"), &gorm.Config{})
-
-	if err != nil {
-		panic("Database connection failed")
-	}
+	database.Connect()
 
 	app := fiber.New()
 
