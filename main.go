@@ -2,6 +2,7 @@ package main
 
 import (
 	"jwt/database"
+	"jwt/routes"
 	"log"
 
 	"github.com/gofiber/fiber/v3"
@@ -12,9 +13,7 @@ func main() {
 
 	app := fiber.New()
 
-	app.Get("/", func(c fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
+	routes.Setup(app)
 
 	log.Fatal(app.Listen(":3000"))
 }
