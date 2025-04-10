@@ -5,7 +5,7 @@ import (
 	"jwt/routes"
 	"log"
 
-	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v2"
 )
 
 func main() {

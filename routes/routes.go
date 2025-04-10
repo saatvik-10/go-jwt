@@ -1,10 +1,11 @@
 package routes
 
 import (
-	"github.com/gofiber/fiber/v3"
 	"jwt/controllers"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 func Setup(app *fiber.App) {
-	app.Get("/", controllers.Hello)
+	app.Post("/api/register", controllers.Register)
 }
